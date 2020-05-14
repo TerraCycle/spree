@@ -47,11 +47,11 @@ module Spree
       end
     end
 
-    def cache_key_for_products
-      count = @products.count
-      max_updated_at = (@products.maximum(:updated_at) || Date.today).to_s(:number)
-      products_cache_keys = "spree/products/all-#{params[:page]}-#{max_updated_at}-#{count}"
-      (common_product_cache_keys + [products_cache_keys]).compact.join('/')
+    def cache_key_for_products(products = @products, additional_cache_key = nil)
+      max_updated_at = (products.maximum(:updated_at) || Date.today).to_s(:number)
+      products_cache_keys =
+        "spree/products/#{products.map(&:id).join('-')}-#{params[:page]}-#{params[:sort_by]}-#{max_updated_at}-#{@taxon&.id}"
+      (common_product_cache_keys + [products_cache_keys] + [additional_cache_key]).compact.join('/')
     end
 
     def cache_key_for_product(product = @product)
