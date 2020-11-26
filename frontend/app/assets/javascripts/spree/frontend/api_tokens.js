@@ -8,13 +8,10 @@ Spree.fetchApiTokens = function () {
         response.json().then(function (json) {
           SpreeAPI.orderToken = json.order_token
           SpreeAPI.oauthToken = json.oauth_token
-          Spree.apiTokensFetched = true
         })
         break
     }
   })
 }
 
-Spree.ready(function () {
-  if (!Spree.apiTokensFetched) Spree.fetchApiTokens()
-})
+Spree.ready(function () { Spree.fetchApiTokens() })

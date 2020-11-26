@@ -3,30 +3,17 @@ Spree.ready(function ($) {
   Spree.onPayment = function () {
     if ($('#checkout_form_payment').length) {
       if ($('#existing_cards').length) {
-        $('#existing_cards').hide()
+        $('#payment-method-fields').hide()
         $('#payment-methods').hide()
-        $("#payment-method-fields label[data-type='card']").click(function() {
-          $('#existing_cards').show()
-          $('.payment-sources').show()
-          $('.existing-cc-radio').first().prop('checked', true)
-        })
-        $("#payment-method-fields label:not([data-type='card'])").click(function() {
-          $('#existing_cards').hide()
+        $('#use_existing_card_yes').click(function () {
+          $('#payment-method-fields').hide()
           $('#payment-methods').hide()
-          $('.payment-sources').hide()
-          $('.existing-cc-radio').prop('checked', false)
-          $('#use_existing_card_no').prop('checked', false)
-        })
-        $('.existing-cc-radio').click(function () {
-          $(this).prop('checked', true)
-          $('#use_existing_card_no').prop('checked', false)
-          $('#use_existing_card_yes').prop('checked', true)
-          $('#payment-methods').hide()
+          $('.existing-cc-radio').prop('disabled', false)
         })
         $('#use_existing_card_no').click(function () {
+          $('#payment-method-fields').show()
           $('#payment-methods').show()
-          $('.existing-cc-radio').prop('checked', false)
-          $('#use_existing_card_yes').prop('checked', false)
+          $('.existing-cc-radio').prop('disabled', true)
         })
       }
       $('.cardNumber').payment('formatCardNumber')
@@ -36,11 +23,6 @@ Spree.ready(function ($) {
         $(this).parent().siblings('.ccType').val($.payment.cardType(this.value))
       })
       $('input[type="radio"][name="order[payments_attributes][][payment_method_id]"]').click(function () {
-        if ($('#payment_method_' + this.value).find('fieldset').children().length == 0) {
-          $('.payment-sources').hide()
-        } else {
-          $('.payment-sources').show()
-        }
         $('#payment-methods li').hide()
         if (this.checked) {
           $('#payment_method_' + this.value).show()
